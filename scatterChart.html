@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<body>
+
+<form action="scatterChart.php" method="POST">
+  choose the wanted Location:
+  <select name="location" required>                <!--in our form we request for the location we want to check-->
+     <option value="brislington">brislington</option><!--we  use required because there has to be a selected value in our form-->
+     <option value="fishponds">fishponds</option>      <!--use of the SelectTag to create a drop down menu with our areas/cities-->
+     <option value="parson_st">parson St</option>
+     <option value="rupert_st">rupert St</option>
+     <option value="wells_rd">Wells Road</option>
+     <option value="newfoundland_way">Newfoundland Way</option>
+   </select>
+        <!--
+        <select name="location" required>  
+          <input list="areas">
+          <datalist id="areas">                in our form we request for the location we want to check
+          <option value="brislington">    use required because there has to be a selected value in our form
+          <option value="fishponds">      
+          <option value="parson_st">   use of the datalist tag>// hard coded though so better not use
+          <option value="rupert_st">
+          <option value="wells_rd">
+          <option value="newfoundland_way">
+          </datalist>
+          -->
+   <br> <!--break-->
+   Insert the time in which you want to check:<input name="timeToCheck", type="time" required/>
+  <br>  <!-- for the scater grafic its required to get time thus the type time and its required in order to see it-->
+  <input type="submit"/>
+  <!--button type=submit" name submition " value submit"> Register</button> -->
+</form>
+</body>
+</html>
