@@ -13,37 +13,40 @@
         var ROW = xmlfile.getElementsByTagName('ROW'); //gets all of the elements from the xml files 
         var graphData=[];
         var temporarTime=[];
-        var listOfNO2AndTime=[];
+        var ListOfNO2AndTime=[];
+        var TemporarNO2 =[];
             for(counter=0;counter<ROW.length; counter++){
                 //console.log("date from ROW=" + (ROW[counter].getAttribute('TIME')));
                     var TemporarDate = new Date(changeTheFormatOfDate(ROW[counter].getAttribute("DATE")));
-                    if (changeTheFormatOfDate(ROW[counter].getAttribute('DATE')) == '<?php echo $_POST["dateToCheck"]; ?>:00'){
+                    if (TemporarDate == '<?php echo $_POST["dateToCheck"]; ?>'){
                     var TemporarTime = ROW[counter].getAttribute("TIME");
                     ListOfNO2AndTime.push(TemporarTime);
-                    var TemporarNO2 =[];
                     TemporarNO2= parseInt(ROW[counter].getAttribute("NO2"));//temporaryInt variable to store the current value of NO2 
                     ListOfNO2AndTime.push(TemporarNO2); /// we use that temporar variabe to store the value we had in the NO2 that we ll use for the graph
-                    graphData.push(ListOfNO2AndTime);
+                   gaphData.push(ListOfNO2AndTime);
                 }//end of if
+             
+         
                  
                 }//end of for
                 google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function(){
                   var data = new google.visualization.DataTable(graphData);
-                        data.addColumn('date', 'DATE');
+                        data.addColumn('date', 'TIME');
                         data.addColumn('number', 'NO2');
                         data.addRows(graphData); 
-                        data.addRows(graphData);
                         data.sort([{column : 0}]);
                     
                     var options = {
-                        title: 'scatter graph thats shows the pollurtion level of '+ '<?php echo $_POST["location"]; ?>' + " at " + '<?php echo $_POST["dateToCheck"]; ?>' ,
-                        hAxis: {title: 'Date'},//(data that will appear below the graph)
+                        title: 'Line graph thats shows the pollurtion level of '+ '<?php echo $_POST["location"]; ?>' + " at " + '<?php echo $_POST["dateToCheck"]; ?>' ,
+                        hAxis: {title: 'Time'},//(data that will appear below the graph)
                         vAxis: {title: 'No2 levels'},//(data that will appear vertical  the graph)
+                        legend: {position: 'bottom'},
                         'width':1000, //size of the graph
                         'height':750
                       };// end of var options
 
+                    
                     var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
                     chart.draw(data, options);
                 });
@@ -71,7 +74,7 @@
 
 </head>
  <body>
-    <div id="curve_chart "style="width: 900px; height: 500px"></div>
+ <div id="curve_chart" style="width: 900px; height: 500px"></div>
   
 </body>
  </html>
