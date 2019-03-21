@@ -3,7 +3,7 @@
 <head> 
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript"> 
+    <script> 
     function drawChart() {
         var xmlhttp = new XMLHttpRequest();
         //issue HTTP requests  in order to exchange data between the web site and a server.
@@ -12,18 +12,18 @@
         var xmlfile = new DOMParser().parseFromString(xmlhttp.responseText,'text/xml');
         var ROW = xmlfile.getElementsByTagName('ROW'); //gets all of the elements from the xml files 
         var graphData=[];
-        var temporarTime=[];
-        var ListOfNO2AndTime=[];
         var TemporarNO2 =[];
+        //console.log(ROW.length);
             for(counter=0;counter<ROW.length; counter++){
-                //console.log("date from ROW=" + (ROW[counter].getAttribute('TIME')));
-                    var TemporarDate = new Date(changeTheFormatOfDate(ROW[counter].getAttribute("DATE")));
+                //console.log("date from ROW=" + (ROW[counter].getAttribute('TIME')));       
+                    var ListOfNO2AndTime=[];
+                    var TemporarDate = changeTheFormatOfDate(ROW[counter].getAttribute("DATE"));
                     if (TemporarDate == '<?php echo $_POST["dateToCheck"]; ?>'){
-                    var TemporarTime = ROW[counter].getAttribute("TIME");
-                    ListOfNO2AndTime.push(TemporarTime);
-                    TemporarNO2= parseInt(ROW[counter].getAttribute("NO2"));//temporaryInt variable to store the current value of NO2 
-                    ListOfNO2AndTime.push(TemporarNO2); /// we use that temporar variabe to store the value we had in the NO2 that we ll use for the graph
-                   gaphData.push(ListOfNO2AndTime);
+                      var TemporarTime = changeTheTimeFormat(ROW[counter].getAttribute("TIME"));
+                      ListOfNO2AndTime.push(TemporarTime);
+                      TemporarNO2= parseInt(ROW[counter].getAttribute("NO2"));//temporaryInt variable to store the current value of NO2 
+                      ListOfNO2AndTime.push(TemporarNO2); /// we use that temporar variabe to store the value we had in the NO2 that we ll use for the graph
+                      graphData.push(ListOfNO2AndTime);
                 }//end of if
              
          
@@ -32,7 +32,7 @@
                 google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function(){
                   var data = new google.visualization.DataTable(graphData);
-                        data.addColumn('date', 'TIME');
+                        data.addColumn('timeofday', 'TIME');
                         data.addColumn('number', 'NO2');
                         data.addRows(graphData); 
                         data.sort([{column : 0}]);
@@ -52,12 +52,15 @@
                 });
             }// end of xmlhttp
 
-      
       xmlhttp.open("GET", '<?php echo $_POST["location"]; ?>' + "_no2.xml"); // will read the location and open the file with the name_no2.xml
       xmlhttp.send();
     }//end of Drawchart
             
-            
+    function changeTheTimeFormat(time){
+      return time.split(':').map(function(item){
+        return parseInt(item)
+      });
+    }    
     
      //a function that Converts the date from dd/mm/yyyy to yyyy-mm-dd
     function changeTheFormatOfDate(TemporarDate){
